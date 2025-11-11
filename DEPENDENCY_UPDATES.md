@@ -53,6 +53,7 @@ This document tracks the dependency update process performed on 2025-11-11. The 
    - `@graphql-codegen/cli`: 5.0.7 → 6.0.1
    - `@graphql-codegen/client-preset`: 4.8.3 → 5.1.1
    - **Impact**: May require configuration updates and could affect generated types
+   - **Additional benefit**: Resolves deprecated `node-domexception@1.0.0` subdependency
    - **Recommendation**: Update together and regenerate all GraphQL types
 
 3. **Stripe JS** `7.9.0 → 8.4.0`
@@ -100,9 +101,10 @@ This document tracks the dependency update process performed on 2025-11-11. The 
 
 ## Security Improvements
 
-- **Vulnerabilities reduced**: From 5 vulnerabilities (3 low, 2 high) to 2 low severity vulnerabilities
+- **Vulnerabilities reduced**: From 5 vulnerabilities (3 low, 2 high) to 4 low severity vulnerabilities
 - **Node.js security**: Updated to latest LTS version with security patches
 - **Dependency freshness**: Most packages now on latest stable versions
+- **Deprecated subdependencies**: 1 warning for `node-domexception@1.0.0` (resolved by updating GraphQL CodeGen to v6)
 
 ## Configuration Changes Made
 
