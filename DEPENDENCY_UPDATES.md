@@ -68,11 +68,13 @@ This document tracks the dependency update process performed on 2025-11-11. The 
 
 ## Testing Status
 
-- ✅ **Dependency installation**: All updated packages install successfully
+- ✅ **Dependency installation**: All updated packages install successfully (both npm and pnpm)
 - ✅ **SvelteKit sync**: Configuration sync works properly
+- ✅ **GraphQL CodeGen config**: Fixed PositiveInt scalar type, generates successfully with valid API
+- ✅ **esbuild compatibility**: Version mismatch resolved, dev server starts correctly
 - ⚠️ **Type checking**: Expected errors due to missing GraphQL codegen (requires API setup)
-- 🔄 **Build process**: Not tested (requires environment configuration)
-- 🔄 **Runtime testing**: Not performed (requires full application setup)
+- 🔄 **Build process**: Ready to test (requires environment configuration)
+- 🔄 **Runtime testing**: Ready to test (requires full application setup)
 
 ## Recommendations
 
@@ -105,6 +107,7 @@ This document tracks the dependency update process performed on 2025-11-11. The 
 - **Node.js security**: Updated to latest LTS version with security patches
 - **Dependency freshness**: Most packages now on latest stable versions
 - **Deprecated subdependencies**: 1 warning for `node-domexception@1.0.0` (resolved by updating GraphQL CodeGen to v6)
+- **Peer dependency warnings**: Minor urql peer dependency warnings (functional but not critical)
 
 ## Configuration Changes Made
 
