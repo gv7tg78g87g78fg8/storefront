@@ -66,12 +66,22 @@ case $ENV in
     production)
         # Direct execution to avoid npm wrapper issues  
         echo "Server PID: $$"
-        exec npx dotenv-cli -e .env.production -- node build/index.js
+        if [ -f "build-production/index.js" ]; then
+            exec npx dotenv-cli -e .env.production -- node build-production/index.js
+        else
+            echo "❌ Production build not found. Run: ./dev.sh build production"
+            exit 1
+        fi
         ;;
     test)
         # Direct execution to avoid npm wrapper issues
         echo "Server PID: $$"
-        exec npx dotenv-cli -e .env.test -- node build/index.js
+        if [ -f "build-test/index.js" ]; then
+            exec npx dotenv-cli -e .env.test -- node build-test/index.js
+        else
+            echo "❌ Test build not found. Run: ./dev.sh build test"
+            exit 1
+        fi
         ;;
     *)
         echo "❌ Unknown environment: $ENV"

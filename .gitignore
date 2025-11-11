@@ -17,6 +17,8 @@ gql/
 
 # production
 /build
+/build-production
+/build-test
 
 # misc
 .DS_Store

@@ -15,14 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get PNPM version from package.json
-        id: pnpm-version
-        run: echo "pnpm_version=$(cat package.json | jq '.engines.pnpm' | sed -E 's/[^0-9.]//g')" >> $GITHUB_OUTPUT
-
       - name: Install PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: ${{ steps.pnpm-version.outputs.pnpm_version }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -33,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         env:
-          PUBLIC_SALEOR_API_URL: https://store-qdjgu50o.eu.saleor.cloud/graphql/
+          PUBLIC_SALEOR_API_URL: https://rozario.eu.saleor.cloud/graphql/
 
       - name: Run security audit
         run: pnpm audit --audit-level moderate

@@ -69,7 +69,7 @@ pnpm run test:docker:full
 ```bash
 # Основные переменные для тестирования
 NODE_ENV=test
-PUBLIC_SALEOR_API_URL=https://store-qdjgu50o.eu.saleor.cloud/graphql/
+PUBLIC_SALEOR_API_URL=https://rozario.eu.saleor.cloud/graphql/
 PUBLIC_STOREFRONT_URL=http://localhost:3000
 BASE_URL=http://localhost:3000
 CI=true

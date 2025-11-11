@@ -41,6 +41,18 @@ else
     exit 1
 fi
 
+# Determine which Svelte config to use based on environment
+if [[ "$ENV_FILE" == *"production"* ]]; then
+    echo "🎭 Using production build configuration"
+    cp svelte.config.production.js svelte.config.js
+elif [[ "$ENV_FILE" == *"test"* ]]; then
+    echo "🧪 Using test build configuration" 
+    cp svelte.config.test.js svelte.config.js
+else
+    echo "💻 Using development build configuration"
+    cp svelte.config.local.js svelte.config.js
+fi
+
 # Run build with proper environment configuration
 $PKG_EXEC $DOTENV_CMD -e "$ENV_FILE" -- $PKG_MANAGER run build
 

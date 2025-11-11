@@ -19,14 +19,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get PNPM version from package.json
-        id: pnpm-version
-        run: echo "pnpm_version=$(cat package.json | jq '.engines.pnpm' | sed -E 's/[^0-9.]//g')" >> $GITHUB_OUTPUT
-
       - name: Install PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: ${{ steps.pnpm-version.outputs.pnpm_version }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,12 +33,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         env:
-          PUBLIC_SALEOR_API_URL: https://store-qdjgu50o.eu.saleor.cloud/graphql/
+          PUBLIC_SALEOR_API_URL: https://rozario.eu.saleor.cloud/graphql/
 
       - name: Generate GraphQL types
         run: pnpm run generate
         env:
-          PUBLIC_SALEOR_API_URL: https://store-qdjgu50o.eu.saleor.cloud/graphql/
+          PUBLIC_SALEOR_API_URL: https://rozario.eu.saleor.cloud/graphql/
 
       - name: Type check
         run: pnpm run check
@@ -54,14 +50,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get PNPM version from package.json
-        id: pnpm-version
-        run: echo "pnpm_version=$(cat package.json | jq '.engines.pnpm' | sed -E 's/[^0-9.]//g')" >> $GITHUB_OUTPUT
-
       - name: Install PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: ${{ steps.pnpm-version.outputs.pnpm_version }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -72,12 +64,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         env:
-          PUBLIC_SALEOR_API_URL: https://store-qdjgu50o.eu.saleor.cloud/graphql/
+          PUBLIC_SALEOR_API_URL: https://rozario.eu.saleor.cloud/graphql/
 
       - name: Build application
         run: pnpm run build
         env:
-          PUBLIC_SALEOR_API_URL: https://store-qdjgu50o.eu.saleor.cloud/graphql/
+          PUBLIC_SALEOR_API_URL: https://rozario.eu.saleor.cloud/graphql/
           PUBLIC_STOREFRONT_URL: https://example.com
 
       - name: Upload build artifacts
@@ -100,14 +92,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get PNPM version from package.json
-        id: pnpm-version
-        run: echo "pnpm_version=$(cat package.json | jq '.engines.pnpm' | sed -E 's/[^0-9.]//g')" >> $GITHUB_OUTPUT
-
       - name: Install PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: ${{ steps.pnpm-version.outputs.pnpm_version }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -118,7 +106,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         env:
-          PUBLIC_SALEOR_API_URL: https://store-qdjgu50o.eu.saleor.cloud/graphql/
+          PUBLIC_SALEOR_API_URL: https://rozario.eu.saleor.cloud/graphql/
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install ${{ matrix.browser }} --with-deps
@@ -132,7 +120,7 @@ jobs:
       - name: Run Playwright tests
         run: pnpm exec playwright test --project="Desktop Chrome"
         env:
-          PUBLIC_SALEOR_API_URL: https://store-qdjgu50o.eu.saleor.cloud/graphql/
+          PUBLIC_SALEOR_API_URL: https://rozario.eu.saleor.cloud/graphql/
           PUBLIC_STOREFRONT_URL: http://127.0.0.1:3002
           BASE_URL: http://127.0.0.1:3002
           CI: true

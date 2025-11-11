@@ -8,7 +8,7 @@ services:
       target: development
     environment:
       - NODE_ENV=development
-      - PUBLIC_SALEOR_API_URL=${PUBLIC_SALEOR_API_URL:-https://store-qdjgu50o.eu.saleor.cloud/graphql/}
+      - PUBLIC_SALEOR_API_URL=${PUBLIC_SALEOR_API_URL:-https://rozario.eu.saleor.cloud/graphql/}
       - PUBLIC_STOREFRONT_URL=${PUBLIC_STOREFRONT_URL:-http://localhost:3000}
       - DEBUG=true
     restart: always
