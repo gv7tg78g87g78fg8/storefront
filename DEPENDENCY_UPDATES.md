@@ -16,7 +16,7 @@ This document tracks the dependency update process performed on 2025-11-11. The 
 
 - `@adyen/adyen-web`: 6.21.0 → 6.25.1
 - `@adyen/api-library`: 29.0.0 → 30.0.0 (major update)
-- `@esbuild/linux-x64`: 0.25.9 → 0.27.0
+- `@esbuild/linux-x64`: 0.25.9 → 0.25.9 (reverted from 0.27.0 due to version mismatch)
 - `@saleor/auth-sdk`: 1.0.2 → 1.0.3
 - `@sveltejs/kit`: 2.37.0 → 2.48.4
 - `dotenv`: 17.2.1 → 17.2.3
