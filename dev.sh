@@ -99,7 +99,7 @@ start_local() {
             ;;
         test)
             echo "🧪 Test mode for testing environment (port 3002)"
-            $PKG_EXEC $DOTENV_CMD -e .env.test -- $PKG_MANAGER run build && ./scripts/start-clean.sh test
+            $PKG_MANAGER run build:test && ./scripts/start-clean.sh test
             ;;
         *)
             echo "❌ Unknown environment: $ENV"
