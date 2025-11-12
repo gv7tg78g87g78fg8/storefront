@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -11,6 +11,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
 COPY package.json pnpm-lock.yaml ./
+COPY scripts/ ./scripts/
 RUN pnpm i --frozen-lockfile --prefer-offline
 
 # Rebuild the source code only when needed
@@ -29,6 +30,9 @@ ENV PUBLIC_STOREFRONT_URL=${PUBLIC_STOREFRONT_URL}
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+
+# Generate GraphQL types
+RUN pnpm run generate || echo "GraphQL generation failed, continuing..."
 
 # Build SvelteKit application
 RUN pnpm build
