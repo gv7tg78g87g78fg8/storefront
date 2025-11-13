@@ -112,13 +112,21 @@ The following updates are available but require Node.js 22+ and should be tested
    - GraphQL CodeGen v6 migration
    - Tailwind CSS v4 migration (breaking changes)
 
-4. **Continuous Updates**: Consider setting up dependabot or similar for automated minor/patch updates
+4. **Docker Testing**: Test the fixed Docker permissions:
+
+   ```bash
+   ./dev.sh docker test  # Should now work without permission errors
+   ```
+
+5. **Continuous Updates**: Consider setting up dependabot or similar for automated minor/patch updates
 
 ## Files Modified
 
 - `package.json`: Updated safe dependencies
 - `scripts/postinstall.sh`: Added Node.js version compatibility handling
-- `dev.sh`: Already has Node.js version check (from previous work)
-- `Dockerfile.test`: Fixed permissions for Playwright tests (from previous work)
+- `dev.sh`: Node.js version check skips Docker commands
+- `Dockerfile.test`: Fixed permissions for Playwright test subdirectories
+- `start-tests.sh`: Added test directory permission checks
+- `playwright.config.container.ts`: Explicit output directory configuration
 
 All changes maintain backward compatibility while enabling the project to work in both Node.js 18 (limited functionality) and Node.js 22+ (full functionality) environments.
