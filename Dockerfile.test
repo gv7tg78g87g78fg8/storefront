@@ -56,17 +56,12 @@ COPY --from=build-stage /app/package.json ./
 COPY --from=build-stage /app/svelte.config.js ./
 COPY --from=build-stage /app/start-tests.sh ./start-tests.sh
 
-# Создаем non-root пользователя
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 sveltekit
-
-# Создаем директории для результатов тестов с полными правами для sveltekit пользователя
+# Создаём директории для тестов с полными правами (запуск как root)
 RUN mkdir -p test-results playwright-report && \
     chmod +x /app/start-tests.sh && \
-    chown -R sveltekit:nodejs /app && \
-    chmod -R 775 test-results playwright-report
+    chmod -R 777 test-results playwright-report
 
-USER sveltekit
+# Оставаемся под root для тестов (полные права)
 
 # Экспонируем порт
 EXPOSE 3000
