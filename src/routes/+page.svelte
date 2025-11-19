@@ -1,52 +1,50 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount } from "svelte";
 	import type { PageData } from "./$types";
 	import ProductList from "@components/ProductList.svelte";
 	import ChannelSelector from "@components/ChannelSelector.svelte";
 	import LoadingSpinner from "@components/LoadingSpinner.svelte";
-	import { 
-		currentChannel, 
-		availableChannels,
-		channelsLoading
-	} from '@stores/channels';
-	import { executeGraphQL } from '@lib/graphql';
-	import { ProductListPaginatedDocument } from '@gql/graphql';
-	
-	// Try to import enhanced queries, fallback to regular ones
-	let ProductListEnhancedDocument: any;
-	try {
-		({ ProductListEnhancedDocument } = await import('@gql/graphql'));
-	} catch {
-		// Enhanced queries not available, use regular ones
-		ProductListEnhancedDocument = ProductListPaginatedDocument;
-	}
+	import { currentChannel, availableChannels, channelsLoading } from "@stores/channels";
+	import { executeGraphQL } from "@lib/graphql";
+	import { ProductListPaginatedDocument } from "@gql/graphql";
+
+	// Use regular query for now - enhanced queries will be imported dynamically when needed
+	let ProductListEnhancedDocument = ProductListPaginatedDocument;
 
 	let { data }: { data: PageData } = $props();
-	
+
 	// State for channel-specific products
 	let channelProducts: Record<string, any[]> = $state({});
 	let loadingProducts = $state(false);
-	
+
 	// Load products when channel changes
 	async function loadProductsForChannel(channelSlug: string) {
 		if (channelProducts[channelSlug]) {
 			return; // Already loaded
 		}
-		
+
 		loadingProducts = true;
 		try {
-			// Try enhanced query first for channels that might have variants
-			const queryToUse = channelSlug.includes('1') || channelSlug.toLowerCase().includes('channel-1') 
-				? ProductListEnhancedDocument 
-				: ProductListPaginatedDocument;
-				
+			// Try to import enhanced query for channels that might have variants
+			let queryToUse = ProductListPaginatedDocument;
+
+			if (channelSlug.includes("1") || channelSlug.toLowerCase().includes("channel-1")) {
+				try {
+					// Dynamically import enhanced query
+					const { ProductListEnhancedDocument: enhancedQuery } = await import("@gql/graphql");
+					queryToUse = enhancedQuery || ProductListPaginatedDocument;
+				} catch (importError) {
+					console.warn("Enhanced GraphQL queries not available, using regular query");
+				}
+			}
+
 			const result = await executeGraphQL(queryToUse, {
 				variables: {
 					first: 12,
 					channel: channelSlug,
 				},
 			});
-			
+
 			if (result.products?.edges?.length) {
 				const products = result.products.edges.map(({ node }: any) => node);
 				channelProducts[channelSlug] = products;
@@ -60,14 +58,14 @@
 			loadingProducts = false;
 		}
 	}
-	
+
 	// React to channel changes
 	$effect(() => {
 		if ($currentChannel && $availableChannels.length > 0) {
 			loadProductsForChannel($currentChannel);
 		}
 	});
-	
+
 	// Load initial products for all channels on mount
 	onMount(async () => {
 		// Wait a bit for channels to load
@@ -103,14 +101,14 @@
 			<h2 class="text-2xl font-bold text-gray-900">Products by Channel</h2>
 			<ChannelSelector variant="dropdown" className="sm:w-auto" />
 		</div>
-		
+
 		<!-- Channel Tabs -->
 		{#if $availableChannels.length > 1}
 			<div class="mb-8">
 				<ChannelSelector variant="tabs" showCurrency={false} />
 			</div>
 		{/if}
-		
+
 		<!-- Products for Current Channel -->
 		{#if $channelsLoading}
 			<div class="flex items-center justify-center py-12">
@@ -124,14 +122,15 @@
 			</div>
 		{:else if $currentChannel && channelProducts[$currentChannel]}
 			{#if channelProducts[$currentChannel].length > 0}
-				<ProductList 
-					products={channelProducts[$currentChannel]} 
-					showVariants={$currentChannel.includes('1') || $currentChannel.toLowerCase().includes('channel-1')}
-					showAttributes={$currentChannel.includes('1') || $currentChannel.toLowerCase().includes('channel-1')}
+				<ProductList
+					products={channelProducts[$currentChannel]}
+					showVariants={$currentChannel.includes("1") || $currentChannel.toLowerCase().includes("channel-1")}
+					showAttributes={$currentChannel.includes("1") ||
+						$currentChannel.toLowerCase().includes("channel-1")}
 				/>
 			{:else}
-				<div class="text-center py-12">
-					<p class="text-gray-600 mb-2">No products available in this channel.</p>
+				<div class="py-12 text-center">
+					<p class="mb-2 text-gray-600">No products available in this channel.</p>
 					<p class="text-sm text-gray-500">Try switching to another channel or check back later.</p>
 				</div>
 			{/if}
@@ -143,7 +142,7 @@
 			</div>
 			<ProductList products={data.products} />
 		{:else}
-			<p class="text-gray-600 text-center py-12">No products available.</p>
+			<p class="py-12 text-center text-gray-600">No products available.</p>
 		{/if}
 	</section>
 </div>

@@ -9,20 +9,8 @@ fragment VariantDetailsEnhanced on ProductVariant {
 				currency
 				amount
 			}
-			net {
-				currency
-				amount
-			}
-			tax {
-				currency
-				amount
-			}
 		}
 		onSale
-		discount {
-			currency
-			amount
-		}
 	}
 	# Variant attributes (size, color, etc.)
 	attributes {
