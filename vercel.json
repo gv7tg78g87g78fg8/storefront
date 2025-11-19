@@ -12,10 +12,5 @@
 			"GRAPHQL_INTROSPECTION": "false",
 			"VERCEL": "1"
 		}
-	},
-	"functions": {
-		"src/routes/**/*.ts": {
-			"maxDuration": 30
-		}
 	}
 }

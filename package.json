@@ -45,7 +45,7 @@
 		"docker:status": "./status.sh",
 		"docker:dev": "./deploy.sh",
 		"docker:prod": "NODE_ENV=production ./deploy.sh",
-		"vercel:build": "pnpm run setup && pnpm run build",
+		"vercel:build": "cp svelte.config.vercel.js svelte.config.js && pnpm run setup && pnpm run build",
 		"vercel:dev": "vercel dev"
 	},
 	"dependencies": {
