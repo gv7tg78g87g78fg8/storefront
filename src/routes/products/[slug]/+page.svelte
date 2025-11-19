@@ -10,28 +10,31 @@
 	let { data }: { data: PageData } = $props();
 
 	const { product } = data;
-	
+
 	// Check if this is an enhanced product (with full variant/attribute data)
-	$: isEnhanced = product && (
-		(product.variants?.length > 0 && product.variants[0].attributes) ||
-		(product.attributes?.length > 0) ||
-		(product.metadata?.length > 0)
+	const isEnhanced = $derived(
+		product &&
+			((product.variants?.length > 0 && product.variants[0].attributes) ||
+				product.attributes?.length > 0 ||
+				product.metadata?.length > 0),
 	);
 
 	// Get selected variant from URL params
-	let selectedVariantId = $state($page.url.searchParams.get("variant") || '');
-	
-	$: selectedVariant = selectedVariantId 
-		? product?.variants?.find((v: any) => v.id === selectedVariantId) 
-		: product?.variants?.[0] ?? undefined;
+	let selectedVariantId = $state($page.url.searchParams.get("variant") || "");
 
-	$: currentPrice = selectedVariant?.pricing?.price?.gross;
-	
+	const selectedVariant = $derived(
+		selectedVariantId
+			? product?.variants?.find((v: any) => v.id === selectedVariantId)
+			: (product?.variants?.[0] ?? undefined),
+	);
+
+	const currentPrice = $derived(selectedVariant?.pricing?.price?.gross);
+
 	// Handle variant selection
 	function handleVariantSelected(event: CustomEvent) {
 		const { variant, variantId } = event.detail;
 		selectedVariantId = variantId;
-		
+
 		// Update URL
 		const url = new URL(window.location.href);
 		url.searchParams.set("variant", variantId);
@@ -78,7 +81,9 @@
 						<p class="mt-2 text-gray-600">{product.category.name}</p>
 					{/if}
 					{#if isEnhanced}
-						<div class="mt-2 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+						<div
+							class="mt-2 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
+						>
 							Enhanced Product
 						</div>
 					{/if}
@@ -92,7 +97,7 @@
 
 				<!-- Enhanced Variant Selector for products with attributes -->
 				{#if isEnhanced && product.variants && product.variants.length > 1}
-					<VariantSelector 
+					<VariantSelector
 						variants={product.variants}
 						{selectedVariantId}
 						{product}
@@ -153,19 +158,19 @@
 
 				<!-- Product Attributes and Custom Fields -->
 				{#if isEnhanced && (product.attributes?.length > 0 || product.metadata?.length > 0)}
-					<ProductAttributes 
+					<ProductAttributes
 						attributes={product.attributes || []}
 						metadata={product.metadata || []}
 						title="Product Information"
 						variant="detailed"
 					/>
 				{/if}
-				
+
 				<!-- Selected Variant Attributes -->
 				{#if selectedVariant?.attributes?.length > 0}
 					<div>
-						<h3 class="text-lg font-medium text-gray-900 mb-3">Selected Variant Details</h3>
-						<ProductAttributes 
+						<h3 class="mb-3 text-lg font-medium text-gray-900">Selected Variant Details</h3>
+						<ProductAttributes
 							attributes={selectedVariant.attributes}
 							metadata={selectedVariant.metadata || []}
 							variant="compact"
